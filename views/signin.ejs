@@ -7,24 +7,33 @@
 </head>
 
 <body>
-	<div class="m-5">
-		<form action="/user/signin" method="post">
-			<div class="form-group">
-				<label for="email">Email address</label>
-				<input type="email" class="form-control" name="email" aria-describedby="emailHelp"
-					placeholder="example@example.com">
-				<small class="error" class="form-text text-muted"></small>
-				
+	<%- include('./partials/nav') %>
+
+		<% if (locals.error) { %>
+			<div class="m-5">
+				<div class="alert alert-danger" role="alert">
+					<%= locals.error %>
+				</div>
 			</div>
-			<div class="form-group">
-				<label for="password">Password</label>
-				<input type="password" class="form-control" name="password" placeholder="Password">
-				<small class="error" class="form-text text-muted"></small>
-			</div>
-			<button type="submit" class="btn btn-primary mt-1">Submit</button>
-		</form>
-	</div>
-	<%- include('./partials/script') %>
+			<% } %>
+				<div class="m-5">
+					<form action="/auth/signin" method="post">
+						<div class="form-group">
+							<label for="email">Email address</label>
+							<input type="email" class="form-control" name="email" aria-describedby="emailHelp"
+								placeholder="example@example.com">
+							<small class="error" class="form-text text-muted"></small>
+
+						</div>
+						<div class="form-group">
+							<label for="password">Password</label>
+							<input type="password" class="form-control" name="password" placeholder="Password">
+							<small class="error" class="form-text text-muted"></small>
+						</div>
+						<button type="submit" class="btn btn-primary mt-1">Submit</button>
+					</form>
+				</div>
+				<%- include('./partials/script') %>
 </body>
 
 </html>
