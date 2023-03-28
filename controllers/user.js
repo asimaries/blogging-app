@@ -3,10 +3,14 @@ const { validateToken } = require('../services/authentication');
 
 async function handleSignUp(req, res) {
   const { fullName, email, password } = req.body;
+  const { filename } = req.file;
   // console.log(req.body)
   try {
     await User.create({
-      fullName, email, password
+      fullName,
+      email,
+      password,
+      profileImageURL: filename,
     })
     return res.redirect('/auth/signin')
   } catch (error) {
@@ -24,7 +28,7 @@ async function handleSignIn(req, res) {
   try {
     const token = await User.matchPasswordAndGenerateToken(email, password);
     res.locals.user = validateToken(token);
-    console.log(res.locals.user, "logged in")
+    console.log(res.locals.user.fullName, "logged in")
     return res.cookie('token', token).redirect('/');
 
   } catch (error) {

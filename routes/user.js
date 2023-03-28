@@ -1,7 +1,10 @@
 const { Router } = require('express')
+const multer = require('multer')
 const { handleSignUp, handleSignIn } = require('../controllers/user')
-
+const { storageForProfile } = require('../services/uploadfile')
 const router = Router()
+
+const upload = multer({ storage: storageForProfile })
 
 router.get('/signin', (req, res) => {
   return res.render('signin')
@@ -15,7 +18,7 @@ router.get('/logout', (req, res) => {
 })
 
 
-router.post('/signup', handleSignUp)
+router.post('/signup', upload.single('profileImageURL'), handleSignUp)
 router.post('/signin', handleSignIn)
 
 

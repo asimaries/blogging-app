@@ -1,1 +1,4 @@
 /node_modules
+/public/profile/*
+/public/uploads/*
+!/public/profile/avatar.svg
