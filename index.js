@@ -1,6 +1,8 @@
 const express = require('express')
 const path = require('path')
 const cookieParser = require('cookie-parser')
+require('dotenv').config()
+
 const { connect } = require('mongoose')
 
 const { router: authRouter } = require('./routes/user.js')

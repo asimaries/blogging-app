@@ -2,3 +2,4 @@
 /public/profile/*
 /public/uploads/*
 !/public/profile/avatar.svg
+# .env
