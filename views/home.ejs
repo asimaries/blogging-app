@@ -9,19 +9,25 @@
 <body>
 
 	<%- include('./partials/nav') %>
-		<!-- <%= JSON.stringify(locals.user) %> -->
-		<div class="container mt-3">
+		<!-- <pre><%= JSON.stringify(locals, null, 4) %></pre> -->
+		<div class="container mt-3 row row-cols-4">
 			<% blogs.forEach(blog=> { %>
-				<div class="card" style="width: 18rem;">
-					<img class="card-img-top" src=<%=`/static/uploads/${blog.createdBy}/${blog.coverImageURL}` %>
-					alt="Card image cap">
-					<div class="card-body">
-						<h5 class="card-title">
-							<%= blog.title %>
-						</h5>
-						<p class="">Blog by <%= blog.createdByName %>
-						</p>
-						<a href=<%- `/blog/${blog._id}` %> class="btn btn-primary">View</a>
+				<div class="col">
+					<div class="card" style="width: 18rem;">
+						<% if (blog?.coverImageURL) { %>
+
+							<img class="card-img-top"
+								src=<%=`/static/uploads/${blog.createdBy._id}/${blog.coverImageURL}` %>
+							alt="Card image cap">
+							<% } %>
+								<div class="card-body">
+									<h5 class="card-title">
+										<%= blog.title %>
+									</h5>
+									<p class="">Blog by <%= blog.createdBy.fullName %>
+									</p>
+									<a href=<%- `/blog/${blog._id}` %> class="btn btn-primary">View</a>
+								</div>
 					</div>
 				</div>
 				<% }) %>

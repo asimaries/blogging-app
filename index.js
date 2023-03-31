@@ -35,7 +35,7 @@ app.use('/auth', authRouter);
 app.use('/blog', blogRouter);
 
 app.get('/', async (req, res) => {
-  const blogs = await Blog.find({}).sort({ createdAt: -1 })
+  const blogs = await Blog.find({}).sort({ createdAt: -1 }).populate("createdBy")
   return res.render('home', {
     user: req.user,
     blogs: blogs,

@@ -3,7 +3,7 @@ const { validateToken } = require('../services/authentication');
 
 async function handleSignUp(req, res) {
   const { fullName, email, password } = req.body;
-  const { filename } = req.file;
+  const  filename  = req.file?.filename;
   // console.log(req.body)
   try {
     await User.create({

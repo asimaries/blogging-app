@@ -1,25 +1,13 @@
 const { Router } = require('express')
 const multer = require('multer')
-// const { storageForBlog } = require('../services/uploadfile')
+
+const { storageForBlog } = require('../services/uploadfile')
 const { Blog } = require('../models/blog')
+const { Comment } = require('../models/comment')
+const { handleNewBlog } = require('../controllers/blog')
 
 const router = Router()
-const fs = require('fs')
 
-const storageForBlog = multer.diskStorage({
-    destination: function (req, file, cb) {
-        console.log(req, file)
-        const directory = `./public/uploads/${req.user._id}`;
-        if (!fs.existsSync(directory)) {
-            fs.mkdirSync(directory, { recursive: true })
-        }
-        cb(null, directory)
-    },
-    filename: function (req, file, cb) {
-        const fileName = `${Date.now()}-${file.originalname}`
-        cb(null, fileName)
-    }
-})
 const upload = multer({ storage: storageForBlog })
 
 router.get('/new-blog', (req, res) => {
@@ -27,25 +15,28 @@ router.get('/new-blog', (req, res) => {
         user: req.user,
     })
 })
-router.post('/new-blog', upload.single('coverImage'), async (req, res) => {
-    const { title, body } = req.body;
-    const { filename } = req.file;
 
-    console.log(title, body, filename);
+router.post('/new-blog', upload.single('coverImage'), handleNewBlog)
 
-    const blog = await Blog.create({
-        title,
-        body,
-        coverImageURL: filename,
-        createdBy: req.user._id,
-        createdByName: req.user.fullName,
+router.get('/:blogID', async (req, res) => {
+    const blog = await Blog.findOne({ _id: req.params.blogID }).populate("createdBy")
+    const comments = await Comment.find({ blogId: req.params.blogID }).populate('createdBy')
+    return res.render('blogpage', {
+        user: req.user,
+        blog: blog,
+        comments: comments,
     })
-    return res.redirect('/');
 })
 
-router.get('/:blogID', (req, res) => {
+router.post('/comment/:blogId', async (req, res) => {
 
-    return res.render('')
+    await Comment.create({
+        content: req.body.comment,
+        createdBy: req.user._id,
+        blogId: req.params.blogId,
+    });
+    return res.redirect(`/blog/${req.params.blogId}`)
+
 })
 
 module.exports = {
